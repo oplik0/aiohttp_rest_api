@@ -2,6 +2,7 @@ from typing import Optional
 import pkgutil
 from inspect import getmembers, isclass
 
+from deepmerge import always_merger
 from aiohttp.web import Application
 
 from aiohttp_rest_api import AioHTTPRestEndpoint, SUPPORTED_METHODS
@@ -64,5 +65,5 @@ def get_openapi_documentation(overrides: dict = None) -> dict:
     """
     global _openapi_documentation
     if isinstance(overrides, dict):
-        _openapi_documentation = {**_openapi_documentation, **overrides}
+        _openapi_documentation = always_merger.merge(openapi_documentation, overrides)
     return _openapi_documentation

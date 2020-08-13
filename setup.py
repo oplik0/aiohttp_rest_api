@@ -18,6 +18,7 @@ requirements = [
     "ujson>=1.35",
     "PyYAML>=3.13",
     "frozendict>=1.2",
+    "deepmerge>=0.1",
 ]
 
 
