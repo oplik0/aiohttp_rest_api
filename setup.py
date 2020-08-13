@@ -36,13 +36,13 @@ with open(version_file, 'r') as fp:
 
 
 setup(
-    name='aiohttp_rest_api',
+    name='aiohttp_rest_api_fork',
     version=version,
     license='MIT',
     url='https://github.com/57uff3r/aiohttp_rest_api',
     author='Andrey Korchak',
     author_email='me@akorchak.software',
-    description='RESTful API servers with aiohttp',
+    description="RESTful API servers with aiohttp - this fork was created to fix a packaging issue with the original and will be deleted once it's merged",
     classifiers=[
         'Intended Audience :: Developers',
         'Programming Language :: Python',
