@@ -4,14 +4,16 @@ from inspect import getmembers, isclass
 
 from aiohttp.web import Application
 
-from aiohttp_rest_api  import AioHTTPRestEndpoint, SUPPORTED_METHODS
-from aiohttp_rest_api.swagger import generate_doc_template, build_doc_from_func_doc
+from aiohttp_rest_api import AioHTTPRestEndpoint, SUPPORTED_METHODS
+from aiohttp_rest_api.redoc import generate_doc_template, build_doc_from_func_doc
 
 
-_swagger_documentation:dict = generate_doc_template()
+_openapi_documentation: dict = generate_doc_template()
 
 
-def load_and_connect_all_endpoints_from_folder(path: str, app: Application, version_prefix: Optional[str] = None) -> Application:
+def load_and_connect_all_endpoints_from_folder(
+    path: str, app: Application, version_prefix: Optional[str] = None
+) -> Application:
     """
 
     :param path:
@@ -19,7 +21,7 @@ def load_and_connect_all_endpoints_from_folder(path: str, app: Application, vers
     :param version_prefix:
     :return:
     """
-    __all__:list = []
+    __all__: list = []
 
     for loader, module_name, is_pkg in pkgutil.walk_packages([path]):
         __all__.append(module_name)
@@ -34,20 +36,33 @@ def load_and_connect_all_endpoints_from_folder(path: str, app: Application, vers
                 for route in endpoint.produce_routes(version_prefix=version_prefix):
                     for method in SUPPORTED_METHODS:
                         method_name = method.lower()
-                        method_code = getattr(endpoint, method_name) if hasattr(endpoint, method.lower())  else None
+                        method_code = (
+                            getattr(endpoint, method_name)
+                            if hasattr(endpoint, method.lower())
+                            else None
+                        )
 
-                        if method_code is not None and callable(method_code) \
-                            and method_code.__doc__ is not None and "---" in method_code.__doc__:
-                            documentation = build_doc_from_func_doc(method_code, method_name)
+                        if (
+                            method_code is not None
+                            and callable(method_code)
+                            and method_code.__doc__ is not None
+                            and "---" in method_code.__doc__
+                        ):
+                            documentation = build_doc_from_func_doc(
+                                method_code, method_name
+                            )
 
-                            _swagger_documentation['paths'][route].update(documentation)
+                            _openapi_documentation["paths"][route].update(documentation)
 
     return app
 
 
-def get_swagger_documentation() -> dict:
+def get_openapi_documentation(overrides: dict = None) -> dict:
     """
 
-    :return: dict with swagger documentation
+    :return: dict with openapi documentation
     """
-    return _swagger_documentation
+    global _openapi_documentation
+    if isinstance(overrides, dict):
+        _openapi_documentation = {**_openapi_documentation, **overrides}
+    return _openapi_documentation

@@ -33,8 +33,8 @@ Put the following content into the files
 
     import os
     from aiohttp import web
-    from aiohttp_rest_api.loader import load_and_connect_all_endpoints_from_folder, get_swagger_documentation
-    from aiohttp_rest_api.swagger import setup_swagger
+    from aiohttp_rest_api.loader import load_and_connect_all_endpoints_from_folder, get_openapi_documentation
+    from aiohttp_rest_api.redoc import setup_openapi
 
     import logging
     logging.basicConfig(level=logging.DEBUG)
@@ -46,7 +46,7 @@ Put the following content into the files
         version_prefix='v1'
     )
 
-    setup_swagger(app, swagger_info=get_swagger_documentation())
+    setup_openapi(app, openapi_info=get_openapi_documentation())
 
     web.run_app(app)
 
@@ -93,7 +93,7 @@ And after that you can start your server: ::
     (Press CTRL+C to quit)
 
 
-And that's it! Swagger documentation is going to be available on http://127.0.0.1:8080/doc
+And that's it! openapi documentation is going to be available on http://127.0.0.1:8080/doc
 
 
 How demo example works
@@ -125,13 +125,13 @@ So if you created an API resource connected to **/demo** and with version **v1**
 You also can enable Swagged documentation page just like that ::
 
 
-    setup_swagger(app, swagger_info=get_swagger_documentation())
+    setup_openapi(app, openapi_info=get_openapi_documentation())
 
 
-Swagger documentation
+openapi documentation
 ---------------------
 
-Every HTTP-verb related method (**get**, **post**, **put**, **path**, **delete**) might documented via Swagger docstrings. ::
+Every HTTP-verb related method (**get**, **post**, **put**, **path**, **delete**) might documented via openapi docstrings. ::
 
 
     async def get(self, request: Request) -> Response:
@@ -147,4 +147,4 @@ Every HTTP-verb related method (**get**, **post**, **put**, **path**, **delete**
 
         return respond_with_plaintext('Hello world')
 
-Just add `- - -` separator and wright your Swagger documentation in YAML format right after it.
+Just add `- - -` separator and wright your openapi documentation in YAML format right after it.

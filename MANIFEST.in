@@ -1,1 +1,1 @@
-graft aiohttp_rest_api/swagger_ui
+graft aiohttp_rest_api/redoc_ui
