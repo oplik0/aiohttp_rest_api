@@ -62,7 +62,7 @@ def generate_doc_template(
             "description": description.strip(),
             "version": api_version,
         },
-        "paths": dict,
+        "paths": defaultdict(dict),
     }
 
 
